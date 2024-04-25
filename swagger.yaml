@@ -2,7 +2,18 @@ openapi: 3.0.3
 info:
   title: Swagger TPO DAI - Sistema de gestion barrial - OpenAPI 3.0
   description: |-
-    TPO realizado para la metria DAI
+    TPO realizado para la materia Desarrollo de Aplicaciones 1 
+    -
+    GRUPO 7 - TURNO MAÑANA
+    -
+    - INTEGRANTES :
+      - CIOFFI SEBASTIÁN
+      - DE BRITO JUAN ANTONIO
+      - BELLANTE GONZALO MARTIN
+      - MANGO NICOLÁS ALEJANDRO
+      
+    - PROFESOR :
+      - GODIO CLAUDIO JOSE
   termsOfService: http://swagger.io/terms/
   contact:
     email: apiteam@swagger.io
@@ -16,7 +27,7 @@ externalDocs:
 servers:
   - url: https://municipio.swagger.io/api/v3
 tags:
-  - name: claim
+  - name: reclamo
     description: Servicios para administrar los reclamos generados para la app para la revision de la municipalidad 
   - name: complaint
     description: Servicios para administrar las denuncias generadas en la app de la municipalidad
@@ -25,58 +36,52 @@ tags:
   - name: user
     description: Operations about user
 paths:
-  /claim:
+  /reclamo:
     put:
       tags:
-        - claim
+        - reclamo
       summary: Actualiza un reclamo existe
       description: Actualiza una reclamo mediante un Id ingresado
-      operationId: updateClaim
+      operationId: actualizarReclamo
       requestBody:
         description: Actualiza una reclamo existente 
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Claim'
+              $ref: '#/components/schemas/Reclamo'
         required: true
       responses:
         '200':
-          description: Successful operation
+          description: Operacion Exitosa
         '400':
-          description: Invalid ID supplied
+          description: ID invalido ingresado
         '404':
-          description: Pet not found
+          description: Denuncia inexistente
         '422':
           description: Validation exception
     post:
       tags:
-        - claim
+        - reclamo
       summary: Registra un nuevo reclamo
       description: Este endpoint permite registrar un nuevo reclamo sobre algun incidente en la municipalidad.
-      operationId: addClaim
+      operationId: generarReclamo
       requestBody:
         description: Crea un nuevo reclamo en la municipalidad
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Claim'
-          application/xml:
-            schema:
-              $ref: '#/components/schemas/Claim'
-          application/x-www-form-urlencoded:
-            schema:
-              $ref: '#/components/schemas/Claim'
+              $ref: '#/components/schemas/Reclamo'
         required: true
       responses:
-        '200':
+        '201':
           description: Operacion Exitosa
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Claim'          
+                $ref: '#/components/schemas/Reclamo'          
             application/xml:
               schema:
-                $ref: '#/components/schemas/Claim'
+                $ref: '#/components/schemas/Reclamo'
         '400':
           description: Entrada Invalida
         '422':
@@ -84,7 +89,7 @@ paths:
         '500':
           description: Error interno del servidor 
           
-  /claim/findByStatus:
+  /Reclamo/filtrarPorEstado:
     get:
       tags:
         - claim
@@ -112,28 +117,28 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Claim'          
+                  $ref: '#/components/schemas/Reclamo'          
             application/xml:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Claim'
+                  $ref: '#/components/schemas/Reclamo'
         '400':
           description: Entrada Invalida 
         '500':
           description: Error interno del servidor 
           
-  /claim/findByType:
+  /reclamo/filtrarPorRubro:
     get:
       tags:
         - claim
-      summary: Busca reclamo por tipo
+      summary: Busca reclamo por rubro
       description: Multipes tipos de reclamos puede ser provistos para realizar busqueda.
       operationId: findPetsByTags
       parameters:
-        - name: tags
+        - name: rubro
           in: query
-          description: Tags to filter by
+          description: Filtrar por rubro
           required: false
           explode: true
           schema:
@@ -142,30 +147,32 @@ paths:
               type: string
       responses:
         '200':
-          description: successful operation
+          description: Operacion exitosa
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Claim'          
+                  $ref: '#/components/schemas/Reclamo'          
             application/xml:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Claim'
+                  $ref: '#/components/schemas/Reclamo'
+        '204':
+          description: Contenido inexistente
         '400':
-          description: Invalid tag value
+          description: Valor invalido de Rubro
           
-  /claim/{claimId}:
+  /reclamo/{IdReclamo}:
     get:
       tags:
-        - claim
+        - reclamo
       summary: Busca reclamo por id
       description: Retorna un unico Reclamo
-      operationId: getClaimById
+      operationId: consultarPorIdReclamo
       parameters:
-        - name: claimId
+        - name: IdReclamo
           in: path
           description: ID del reclamo
           required: true
@@ -178,22 +185,22 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Claim'          
+                $ref: '#/components/schemas/Reclamo'          
             application/xml:
               schema:
-                $ref: '#/components/schemas/Claim'
+                $ref: '#/components/schemas/Reclamo'
         '400':
           description: ID ingresado invalido
         '404':
           description: Reclamo inexistente
     delete:
       tags:
-        - claim
+        - reclamo
       summary: Elimina un reclamo
       description: Borra un unico reclamo del sistema  
-      operationId: deletePet
+      operationId: borrarReclamo
       parameters:
-        - name: claimId
+        - name: IdReclamo
           in: path
           description: ID del reclamo a eliminar
           required: true
@@ -206,19 +213,19 @@ paths:
         '204':
           description: No content
           
-  /complaint:
+  /denuncia:
     post:
       tags:
-        - complaint
+        - denuncia
       summary: Genera una denuncia en el sistema
       description: Permite generar una nueva denuncia a un comercio/vecino del municipo
-      operationId: addComplaint
+      operationId: generarDenuncia
       requestBody:
         description: Crea una nueva denuncia en la municipalidad
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Complaint'
+              $ref: '#/components/schemas/Denuncia'
         required: true
       responses:
         '200':
@@ -226,7 +233,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Complaint'          
+                $ref: '#/components/schemas/Denuncia'          
         '400':
           description: Entrada Invalida
         '422':
@@ -234,15 +241,15 @@ paths:
         '500':
           description: Error interno del servidor 
           
-  /complaint/{complaintId}:
+  /denuncia/{idDenuncia}:
     get:
       tags:
-        - complaint
-      summary: Busca una denuncia puntual por complaintId
-      description: En base al complintID busca e informa la denuncia cargada en el sistema
-      operationId: getByComplaintId
+        - denuncia
+      summary: Busca una denuncia puntual por idDenuncia
+      description: En base al idDenuncia busca e informa la denuncia cargada en el sistema
+      operationId: buscarPorIdDenuncia
       parameters:
-        - name: complaintId
+        - name: idDenuncia
           in: path
           description: ID de la denuncia a consultar
           required: true
@@ -255,19 +262,19 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Complaint'          
+                $ref: '#/components/schemas/Denuncia'          
         '400':
           description: ID Denuncia invalido
         '404':
           description: Denuncia inexistente
     put:
       tags:
-        - complaint
-      summary: Actualizo una denuncia puntual por complaintId
+        - denuncia
+      summary: Actualizo una denuncia puntual por idDenuncia
       description: En base al userId informado busca las denuncias generadas 
-      operationId: setByComplaintId
+      operationId: modificarPorDenunciaId
       parameters:
-        - name: complaintId
+        - name: idDenuncia
           in: path
           description: ID de la denuncia para actualizar
           required: true
@@ -285,12 +292,12 @@ paths:
           description: Validation exception
     delete:
       tags:
-        - complaint
+        - denuncia
       summary: Elimina una denuncia por ID
       description: Elimina de la base de datos una denuncia utilizando como parametro de entrada el id denuncia
-      operationId: deleteOrder
+      operationId: borrarDenuncia
       parameters:
-        - name: complaintId
+        - name: idDenuncia
           in: path
           description: ID de la denuncia que se va eliminar
           required: true
@@ -303,13 +310,13 @@ paths:
         '404':
           description: Denuncia inexistente
           
-  /complaint/findByUserId/{userId}:
+  /denuncia/buscarDenunciasGeneradas/{userId}:
     get:
       tags:
         - complaint
       summary: Busca las denuncias generadas por un usuario
       description: En base al userId informado busca las denuncias generadas 
-      operationId: getComplaintByUserId
+      operationId: buscarDenunciaGeneradasPorUserID
       parameters:
         - name: userId
           in: path
@@ -326,17 +333,16 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Complaint'          
+                  $ref: '#/components/schemas/Denuncia'          
         '204':
           description: Usuario sin denuncias cargadas
         '400':
           description: ID Usuario invalido
-
         
-  /complaint/findByDenounced/{userId}:
+  /denuncia/buscarDenunciasVinculadas/{userId}:
     get:
       tags:
-        - complaint
+        - denuncia
       summary: Busca las denuncias que se le hicieron a un vecino/comercio
       description: En base al userId informado busca las denuncias que se le hicieron 
       operationId: getOrderByDenouncedId
@@ -356,25 +362,25 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Complaint'    
+                  $ref: '#/components/schemas/Denuncia'    
         '204':
           description: Usuario sin denuncias cargadas
         '400':
           description: ID Usuario invalido
 
-  /promotion:
+  /promocion:
     post:
       tags:
-        - promotion
+        - promocion
       summary: Genera una promocion en el sistema
       description: Permite generar una nueva promocion de un comercio/vecino del municipo
-      operationId: addPromotion
+      operationId: generarPromocion
       requestBody:
         description: Crea una nueva promocion en la municipalidad
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Promotion'
+              $ref: '#/components/schemas/Promocion'
         required: true
       responses:
         '200':
@@ -382,7 +388,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Promotion'          
+                $ref: '#/components/schemas/Promocion'          
         '400':
           description: Entrada Invalida
         '422':
@@ -390,15 +396,15 @@ paths:
         '500':
           description: Error interno del servidor 
 
-  /promotion/{promotionId}:
+  /promocion/{idPromocion}:
     get:
       tags:
-        - promotion
-      summary: Busca una denuncia puntual por complaintId
-      description: En base al complintID busca e informa la denuncia cargada en el sistema
-      operationId: getBypromotionId
+        - promocion
+      summary: Busca una denuncia puntual por idPromocion
+      description: En base al idPromocion busca e informa la denuncia cargada en el sistema
+      operationId: consutarPorIdPromocion
       parameters:
-        - name: promotionId
+        - name: idPromocion
           in: path
           description: ID de la promocion a consultar
           required: true
@@ -411,19 +417,19 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Promotion'          
+                $ref: '#/components/schemas/Promocion'          
         '400':
           description: ID Promocion invalido
         '404':
           description: Promocion inexistente
     put:
       tags:
-        - promotion
-      summary: Actualizo una promocion puntual por promotionId
+        - promocion
+      summary: Actualizo una promocion puntual por idPromocion
       description: En base al userId informado busca las promociones generadas 
-      operationId: setByPromotionId
+      operationId: actualizarPorIdPromocion
       parameters:
-        - name: promotionId
+        - name: idPromocion
           in: path
           description: ID de la denuncia para actualizar
           required: true
@@ -441,12 +447,12 @@ paths:
           description: Validation exception
     delete:
       tags:
-        - promotion
+        - promocion
       summary: Elimina una promocion por ID
-      description: Elimina de la base de datos una promocionutilizando como parametro de entrada el id de promocion
-      operationId: deletePromotion
+      description: Elimina de la base de datos una promocion utilizando como parametro de entrada el id de promocion
+      operationId: borrarPromocion
       parameters:
-        - name: promotionId
+        - name: idPromocion
           in: path
           description: ID de la promocion que se va eliminar
           required: true
@@ -459,13 +465,13 @@ paths:
         '404':
           description: Promocion inexistente
   
-  /promotion/findByStatus:
+  /promocion/buscarPorEstado:
     get:
       tags:
-        - promotion
+        - promocion
       summary: Busca promociones por estado 
       description: Permite buscar promociones por el estado 
-      operationId: findPromotionByStatus
+      operationId: buscarPromocionPorEstado
       parameters:
         - name: status
           in: query
@@ -486,7 +492,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Promotion'          
+                  $ref: '#/components/schemas/Promocion'          
         '400':
           description: Entrada Invalida 
         '500':
@@ -709,19 +715,23 @@ components:
           example: 1
       xml:
         name: user
-    Claim:
+    Reclamo:
       required:
         - IdVecino
       type: object
       properties:
-        idClaim:
+        idReclamo:
           type: integer
           format: int64
           example: 10
+        idReclamoUnificado:
+          type: integer
+          format: int64
+          example: 10123123123
         idVecino:
           type: integer
           example: 33111222
-        status:
+        estado:
           type: string
           description: estado del tramite
           enum:
@@ -731,11 +741,19 @@ components:
         direccion:
           type: object 
           properties:
-            nombreCalle:
+            latitud:
+              type: string
+              description: Coordenada de Latitud del sitio con desperfecto.
+              example: 4455
+            longitud:
+              type: string
+              description: Coordenada de Longitud del sitio con desperfecto.
+              example: Av.Corrientes
+            calle:
               type: string
               description: Nombre de la calle donde ocurrió el desperfecto.
               example: Av.Corrientes
-            altura:
+            numero:
               type: integer
               description: Altura donde ocurrió el desperfecto.
               example: 5609
@@ -743,6 +761,14 @@ components:
               type: string
               description: Número de departamento si corresponde.
               example: 4H
+            entreCalleA:
+              type: string
+              description: Nombre de la primer entrecalle donde ocurrió el desperfecto.
+              example: Av.Corrientes
+            entreCalleB:
+              type: string
+              description: Nombre de la segunda entrecalle donde ocurrió el desperfecto.
+              example: Av.Corrientes
             codigoPostal:
               type: string
               description: Código postal del área.
@@ -754,7 +780,7 @@ components:
         desperfecto: 
           type: object 
           properties: 
-            tipo:
+            rubro:
               type: string
               description: Tipo de desperfecto reportado.
               example: ELECTRICO
@@ -771,16 +797,16 @@ components:
           items:
              type: string
           description : Url's de las fotos del reclamo
-        derivaciones: 
+        movimientosReclamo: 
           type : array 
           items: 
              type: object 
              properties:
-               idFuncionario:
+               idMovimiento:
                  type : integer
-                 description: Id del funcionario que estuvo trabajando en el reclamo
+                 description: Id del movimiento vinculado al reclamo
                  example : 2384890
-               nombreFuncionario:
+               responsable:
                  type : string
                  description: Nombre del funcionario que estuvo trabajando en el reclamo
                  example : Jorge Luis Gomez
@@ -788,11 +814,11 @@ components:
                  type : string
                  description: Nombre del departamento donde estan trabajando con el reclamo
                  example : Departamento de Contabilidad 
-               motivoDerivacion:
+               causa:
                   type : string
                   description: Motivo por el cual se realiza la derivacion a otra area
                   example : Se necesita la aprobacion de contabilidad
-               fechaDerivacion:
+               fecha:
                   type : string
                   description: Fecha donde el funcionario realizo la derivacion
                   example : 2024-04-25
@@ -801,12 +827,12 @@ components:
                  items:
                     type: string
                     description: Comentario que realizo el funcionario sobre el reclamo
-    Complaint:
+    Denuncia:
       required:
         - IdVecino
       type: object
       properties:
-        idComplaint:
+        idDenuncia:
           type: integer
           format: int64
           example: 1012
@@ -816,7 +842,7 @@ components:
         idDenunciado:
           type: integer
           example: 11333222
-        status:
+        estado:
           type: string
           description: Estado de la denuncia
           enum:
@@ -824,6 +850,48 @@ components:
             - EN PROCESO
             - RESUELTA
             - RECHAZADA
+        aceptaResponsabilidad:
+          type: string
+          example: 'SI'
+        direccion:
+          type: object 
+          properties:
+            latitud:
+              type: string
+              description: Coordenada de Latitud del sitio con desperfecto.
+              example: 4455
+            longitud:
+              type: string
+              description: Coordenada de Longitud del sitio con desperfecto.
+              example: Av.Corrientes
+            calle:
+              type: string
+              description: Nombre de la calle donde ocurrió el desperfecto.
+              example: Av.Corrientes
+            numero:
+              type: integer
+              description: Altura donde ocurrió el desperfecto.
+              example: 5609
+            departamento:
+              type: string
+              description: Número de departamento si corresponde.
+              example: 4H
+            entreCalleA:
+              type: string
+              description: Nombre de la primer entrecalle donde ocurrió el desperfecto.
+              example: Av.Corrientes
+            entreCalleB:
+              type: string
+              description: Nombre de la segunda entrecalle donde ocurrió el desperfecto.
+              example: Av.Corrientes
+            codigoPostal:
+              type: string
+              description: Código postal del área.
+              example: 1419
+            localidad:
+              type: string
+              description: Nombre de la localidad donde ocurrió el desperfecto
+              example: CABA
         descargo: 
           type: object 
           properties: 
@@ -856,7 +924,7 @@ components:
                  type : string
                  description: Fecha del comentario realizado
   
-    Promotion:
+    Promocion:
       required:
         - IdVecino
       type: object
@@ -910,11 +978,19 @@ components:
             direccion:
               type: object 
               properties:
-                nombreCalle:
+                latitud:
+                  type: string
+                  description: Coordenada de Latitud del sitio con desperfecto.
+                  example: 4455
+                longitud:
+                  type: string
+                  description: Coordenada de Longitud del sitio con desperfecto.
+                  example: Av.Corrientes
+                calle:
                   type: string
                   description: Nombre de la calle donde ocurrió el desperfecto.
                   example: Av.Corrientes
-                altura:
+                numero:
                   type: integer
                   description: Altura donde ocurrió el desperfecto.
                   example: 5609
@@ -922,6 +998,14 @@ components:
                   type: string
                   description: Número de departamento si corresponde.
                   example: 4H
+                entreCalleA:
+                  type: string
+                  description: Nombre de la primer entrecalle donde ocurrió el desperfecto.
+                  example: Av.Corrientes
+                entreCalleB:
+                  type: string
+                  description: Nombre de la segunda entrecalle donde ocurrió el desperfecto.
+                  example: Av.Corrientes
                 codigoPostal:
                   type: string
                   description: Código postal del área.
