@@ -29,9 +29,9 @@ servers:
 tags:
   - name: reclamo
     description: Servicios para administrar los reclamos generados para la app para la revision de la municipalidad 
-  - name: complaint
+  - name: denuncia
     description: Servicios para administrar las denuncias generadas en la app de la municipalidad
-  - name: promotion
+  - name: promocion
     description: Servicios para administrar las promociones generadas en la app de la municipalidad
   - name: user
     description: Operations about user
@@ -89,10 +89,10 @@ paths:
         '500':
           description: Error interno del servidor 
           
-  /Reclamo/filtrarPorEstado:
+  /reclamo/filtrarPorEstado:
     get:
       tags:
-        - claim
+        - reclamo
       summary: Busca reclamos por estado 
       description: Permite buscar reclamos por el estado 
       operationId: findClaimByStatus
@@ -131,7 +131,7 @@ paths:
   /reclamo/filtrarPorRubro:
     get:
       tags:
-        - claim
+        - reclamo
       summary: Busca reclamo por rubro
       description: Multipes tipos de reclamos puede ser provistos para realizar busqueda.
       operationId: findPetsByTags
@@ -313,7 +313,7 @@ paths:
   /denuncia/buscarDenunciasGeneradas/{userId}:
     get:
       tags:
-        - complaint
+        - denuncia
       summary: Busca las denuncias generadas por un usuario
       description: En base al userId informado busca las denuncias generadas 
       operationId: buscarDenunciaGeneradasPorUserID
